@@ -1,0 +1,1356 @@
+import tkinter as tk
+from tkinter import ttk
+from tkinter import messagebox
+from tkinter import ttk, filedialog
+import xlrd
+import openpyxl as xl
+from tkinter import *
+import xlsxwriter
+import os
+from PIL import ImageTk, Image  
+from urllib.request import urlopen
+import pandas
+root= tk.Tk()
+root.title("LEDS VALIDATION & IMPORT SHEET CREATION TOOL")
+root.geometry("1920x1080")
+
+#listbox
+def check1Clicked():
+    #print("clicked")
+    selected = listbox.curselection()  # returns a tuple
+    #print(selected)
+    for idx in selected:
+        #print(listbox.get(idx))
+        #Product
+        if listbox.get(idx) == 'Product':
+            check1Clicked.prod_check = 1
+            #print(check1Clicked.prod_check)
+            continue
+        #Characteristics    
+        if listbox.get(idx) == 'Characteristics' :
+            check1Clicked.Characteristics_check = 1
+            #print(check1Clicked.Characteristics_check)
+            continue
+        #Characteristics To Products    
+        if listbox.get(idx) == 'Characteristics To Products' :
+            check1Clicked.Characteristics_To_Products_check = 1
+         #   print(check1Clicked.Characteristics_To_Products_check)
+            continue
+        #Products To Units    
+        if listbox.get(idx) == 'Products To Units' :
+            check1Clicked.Products_To_Units_check = 1
+          #  print(check1Clicked.Products_To_Units_check)
+            continue
+        #Central Spec Variables    
+        if listbox.get(idx) == 'Central Spec Variables' :
+            check1Clicked.Central_Spec_Variables_check = 1
+           # print(check1Clicked.Central_Spec_Variables_check)
+            continue
+        #Central Specs    
+        if listbox.get(idx) == 'Central Specs' :
+            check1Clicked.Central_Specs_check = 1
+            #print(check1Clicked.Central_Specs_check)
+            continue
+        #Reason Tree Column Titles    
+        if listbox.get(idx) == 'Reason Tree Column Titles' :
+            check1Clicked.Reason_Tree_Column_Titles_check = 1
+            #print(check1Clicked.Reason_Tree_Column_Titles_check)
+            continue
+        #Main Tree Data    
+        if listbox.get(idx) == 'Main Tree Data' :
+            check1Clicked.Main_Tree_Data_check = 1
+            #print(check1Clicked.Main_Tree_Data_check)
+            continue
+         #Main Fault Data   
+        if listbox.get(idx) == 'Main Fault Data' :
+            check1Clicked.Main_Fault_Data_check = 1
+            #print(check1Clicked.Main_Fault_Data_check)
+            continue
+        if listbox.get(idx) == 'Displays' :
+            check1Clicked.Displays_check = 1
+            #print(check1Clicked.Displays_check)
+            continue
+    deselect=set()
+    for x in range(0, 10):
+        if x in selected:
+            continue
+        deselect.add(x)
+    #print(deselect)
+    if len(deselect)!=0:
+        for idx in deselect:
+            #print(listbox.get(idx))
+            #Product
+            if listbox.get(idx) == 'Product':
+                check1Clicked.prod_check = 0
+             #   print(listbox.get(idx))
+                continue
+            #Characteristics    
+            if listbox.get(idx) == 'Characteristics' :
+                check1Clicked.Characteristics_check = 0
+              #  print(check1Clicked.Characteristics_check)
+                continue
+            #Characteristics To Products    
+            if listbox.get(idx) == 'Characteristics To Products' :
+                check1Clicked.Characteristics_To_Products_check = 0
+               # print(check1Clicked.Characteristics_To_Products_check)
+                continue
+            #Products To Units    
+            if listbox.get(idx) == 'Products To Units' :
+                check1Clicked.Products_To_Units_check = 0
+               # print(check1Clicked.Products_To_Units_check)
+                continue
+            #Central Spec Variables    
+            if listbox.get(idx) == 'Central Spec Variables' :
+                check1Clicked.Central_Spec_Variables_check = 0
+                #print(check1Clicked.Central_Spec_Variables_check)
+                continue
+            #Central Specs    
+            if listbox.get(idx) == 'Central Specs' :
+                check1Clicked.Central_Specs_check = 0
+                #print(check1Clicked.Central_Specs_check)
+                continue
+            #Reason Tree Column Titles    
+            if listbox.get(idx) == 'Reason Tree Column Titles' :
+                check1Clicked.Reason_Tree_Column_Titles_check = 0
+                #print(check1Clicked.Reason_Tree_Column_Titles_check)
+                continue
+            #Main Tree Data    
+            if listbox.get(idx) == 'Main Tree Data' :
+                check1Clicked.Main_Tree_Data_check = 0
+                #print(check1Clicked.Main_Tree_Data_check)
+                continue
+             #Main Fault Data   
+            if listbox.get(idx) == 'Main Fault Data' :
+                check1Clicked.Main_Fault_Data_check = 0
+                #print(check1Clicked.Main_Fault_Data_check)
+                continue
+            if listbox.get(idx) == 'Displays' :
+                check1Clicked.Displays_check = 0
+                #print(check1Clicked.Displays_check)
+                continue
+        
+    #btn2['state']=NORMAL
+check1Clicked.prod_check = 0
+check1Clicked.Characteristics_check = 0
+check1Clicked.Characteristics_To_Products_check = 0
+check1Clicked.Products_To_Units_check = 0 
+check1Clicked.Central_Spec_Variables_check = 0 
+check1Clicked.Central_Specs_check = 0 
+check1Clicked.Reason_Tree_Column_Titles_check = 0
+check1Clicked.Main_Tree_Data_check = 0
+check1Clicked.Main_Fault_Data_check = 0
+check1Clicked.Displays_check = 0
+frame = Frame(root)
+frame.pack()
+frame.place(x=80,y=520)
+'''listbox = Listbox(root, height = 5,
+                  width = 22,
+                  bg = "#FFFFFF",
+                  activestyle = 'dotbox',
+                  font = "Helvetica",
+                  fg = "Black",
+                  #relief= 'raised',
+                  selectmode='multiple')'''
+listbox = Listbox(frame,height = 5,
+                  width = 22,
+                  bg = "#FFFFFF",
+                  activestyle = 'dotbox',
+                  font = "Helvetica",
+                  fg = "Black",
+                  #relief= 'raised',
+                  selectmode='multiple')
+listbox.pack(side=LEFT)
+sb = Scrollbar(frame, orient=VERTICAL)
+sb.pack(side=RIGHT, fill=Y)
+
+listbox.configure(yscrollcommand=sb.set)
+sb.config(command=listbox.yview)
+lis=["Product","Characteristics","Characteristics To Products",\
+     "Products To Units","Central Spec Variables",\
+         "Central Specs","Reason Tree Column Titles","Main Tree Data",\
+             "Main Fault Data", "Displays"]
+#Now we will add this into window as it would expand accordingly in both axis
+listbox.pack(expand=YES,fill="both")
+listbox.place()
+#insering each items into options this will add into list that get displayed
+for i in lis:
+    listbox.insert(END,i)
+button = tk.Button(root, text='Confirm', width=25, command=check1Clicked) 
+button.place(x=80, y=650)
+#label
+root.configure(bg='#FFFFFF')
+box1 = tk.Label(root, 
+		 text="LEDS VALIDATION & IMPORT SHEET CREATION TOOL",
+ 		 fg = "BLACK",
+		 font = ("Times new roman",25,"underline"),takefocus="true",background='#FFFFFF').pack()
+Prerequest = tk.Label(root, 
+		 text="PREREQUISITES",
+ 		 fg = "BLACK",
+		 font = ("Times new roman",20,"underline"),takefocus="true",background='#FFFFFF')
+Prerequest.place(x=700,y=50)
+
+one = tk.Label(root, 
+		 text="1) Make sure the CDW is in .Xls format\
+             \n2) Make sure in CDW all sheets must be same as the below names\
+             \n    ✓ Plant Model\n    ✓ Reason Tree Column Titles\n    ✓ Main Tree Data\
+            \n    ✓ Main Fault Data & unit name Fault Data\
+            \n    ✓ Products\n    ✓ Characteristics\n    ✓ Characteristics To Products\
+            \n    ✓ Products To Units\n    ✓ Central Spec Variables\n    ✓ Central Specs\
+            \n3) Make sure in CDW the central spec sheet other than target OverRide all other OverRide Must be FLASE\
+            \n4) Make sure No sheets are hidden",
+ 		 fg = "BLACK",
+          bd=18,
+          justify='left',
+         relief="groove", #raised
+		 font = ("Times new roman",15),takefocus="true",background='#FFFFFF')
+one.place(x=350,y=90)
+
+two = tk.Label(root,
+               text="Please select the sheets site going to configure and already existing in PPA",
+               fg = "BLACK",
+     		   font = ("Times new roman",18),takefocus="true",background='#FFFFFF')                                       
+two.place(x=5,y=450)
+
+box2 = tk.Label(root, 
+		 text="Click button to select CDW",
+ 		 fg = "BLACK",
+		 font = ("Times new roman",15),background='#FFFFFF')
+box2.place(x=5, y=50)
+
+
+#Open CDW from file manager
+def open_text_file():
+    filename = filedialog.askopenfilename(title="Open a File", filetype=(("xlxs files", ".*xls"),("All Files", "*.")))
+    open_text_file.workbook = xlrd.open_workbook(filename)
+    #open_text_file.Product_check=messagebox.askquestion('Conformation', 'This line have already exisited product?')
+    Required_Sheet = ["Plant Model","Products","Characteristics ","Characteristics To Products","Products To Units","Central Spec Variables","Central Specs","Reason Tree Column Titles","Main Tree Data","Fault","Displays"]
+    SheetNotPresent=0
+    NotPresentSheet=[]
+    for i in  Required_Sheet:
+        a=0
+        for j in open_text_file.workbook.sheet_names():
+                if i=='Fault':
+                    if 'Fault' in j :
+                        break
+                    else:
+                        a=1
+                else:
+                    if(i ==j):
+                        a=1
+                        break
+        if(a==0):
+     #       print(i)
+            NotPresentSheet.append(i)
+            SheetNotPresent+=1            
+        else:
+            a=0
+    if(len(NotPresentSheet)!=0):
+                messagebox.showwarning("Warning", str(NotPresentSheet) + " : not present in the CDW.")
+    sheet_column_check=[]
+    sheet_column_check_no=0
+    if(SheetNotPresent==0):
+        ss1=open_text_file.workbook.sheet_by_name('Plant Model')
+        if(ss1.ncols!=4):
+            sheet_column_check.append('Plant Model')
+            sheet_column_check_no=1
+        if(check1Clicked.prod_check==0):
+            ss2=open_text_file.workbook.sheet_by_name('Products')
+            if(ss2.ncols!=12):
+                sheet_column_check.append('Products')
+                sheet_column_check_no=1
+        if(check1Clicked.Characteristics_check==0):    
+            ss3=open_text_file.workbook.sheet_by_name('Characteristics ')
+            if(ss3.ncols!=15):
+                sheet_column_check.append('Characteristics')
+                sheet_column_check_no=1
+        if(check1Clicked.Characteristics_To_Products_check==0):
+            ss4=open_text_file.workbook.sheet_by_name('Characteristics To Products')
+            if(ss4.ncols!=5):
+                sheet_column_check.append('Characteristics To Products')
+                sheet_column_check_no=1
+        if(check1Clicked.Products_To_Units_check==0):
+            ss5=open_text_file.workbook.sheet_by_name('Products To Units')
+            if(ss5.ncols!=4):
+                sheet_column_check.append('Products To Units')
+                sheet_column_check_no=1
+        if(check1Clicked.Central_Spec_Variables_check==0):
+            ss6=open_text_file.workbook.sheet_by_name('Central Spec Variables')
+            if(ss6.ncols!=9):
+                sheet_column_check.append('Central Spec Variables')
+                sheet_column_check_no=1
+        if(check1Clicked.Central_Specs_check==0):
+            ss7=open_text_file.workbook.sheet_by_name('Central Specs')
+            if(ss7.ncols!=32):
+                sheet_column_check.append('Central Specs')
+                sheet_column_check_no=1
+        if(check1Clicked.Reason_Tree_Column_Titles_check==0):
+            ss8=open_text_file.workbook.sheet_by_name('Reason Tree Column Titles')
+            if(ss8.ncols!=6):
+                sheet_column_check.append('Reason Tree Column Titles')
+                sheet_column_check_no=1
+        if(check1Clicked.Main_Tree_Data_check==0):
+            ss9=open_text_file.workbook.sheet_by_name('Main Tree Data')
+            if(ss9.ncols!=12):
+                sheet_column_check.append('Main Tree Data')
+                sheet_column_check_no=1
+        if(check1Clicked.Main_Fault_Data_check==0):
+            header_fault_data1=[]
+            fault_name1=[]
+            for i in (open_text_file.workbook.sheet_names()):
+                if "Fault" in i:
+                    header_fault_data1.append(open_text_file.workbook.sheet_by_name(i))
+                    fault_name1.append(i)
+            for a,b in zip(header_fault_data1,fault_name1):
+                if(a.ncols!=7):
+                    sheet_column_check.append(b)
+                    sheet_column_check_no=1
+        if(check1Clicked.Displays_check==0):
+            ss10=open_text_file.workbook.sheet_by_name('Displays')
+            if(ss10.ncols!=39):
+                sheet_column_check.append('Displays')
+                sheet_column_check_no=1
+    if(len(sheet_column_check)!=0):
+        messagebox.showwarning("Warning", str(sheet_column_check) + " : header is missing.")
+        
+    header_val=[]
+    header_check=0
+    if(SheetNotPresent==0 and sheet_column_check_no==0):
+        s1=open_text_file.workbook.sheet_by_name('Plant Model')
+        print("plant model ",s1.ncols)
+        if( not('Department' in s1.cell_value(4,0)) or not('Production Line' in s1.cell_value(4,1)) or not('Production Unit' in s1.cell_value(4,2)) or not('Master Unit' in s1.cell_value(4,3))):
+            header_val.append("Pland model")
+            header_check=1
+        if(check1Clicked.prod_check==0):
+            s2=open_text_file.workbook.sheet_by_name('Products')
+            print("product ",s2.ncols)
+            if(not('Product Code' in s2.cell_value(4,0)) or not('Product Description' in s2.cell_value(4,1)) or not('Product Family' in s2.cell_value(4,2)) or not('Target Rate' in s2.cell_value(4,3)) or not('Ideal Rate' in s2.cell_value(4,4)) or not('Stat Case Conversion' in s2.cell_value(4,5)) or not('Primary per Secondary' in s2.cell_value(4,6)) or not('Property' in s2.cell_value(4,7)) or not('Specification Variable1' in s2.cell_value(4,8)) or not('Specification Variable2' in s2.cell_value(4,9)) or not('Specification Variable3' in s2.cell_value(4,10)) or not('Specification Variable4' in s2.cell_value(4,11))):
+                header_val.append("Products")
+                header_check=1
+        if(check1Clicked.Characteristics_check==0):                                                                                                                                                                     
+            s3=open_text_file.workbook.sheet_by_name('Characteristics ')
+            print("characteristics ",s3.ncols)
+            if(not('Property' in s3.cell_value(4,0)) or not('Characteristic' in s3.cell_value(4,1)) or not('Parent Characteristic' in s3.cell_value(4,2))):
+                header_val.append("Characteristics")
+                header_check=1
+        if(check1Clicked.Characteristics_To_Products_check==0):
+            s4=open_text_file.workbook.sheet_by_name('Characteristics To Products')
+            print("Characteristics ",s4.ncols)
+            if(not('Production Line' in s4.cell_value(3,0)) or not('Production Unit' in s4.cell_value(3,1)) or not('Product Code' in s4.cell_value(3,2)) or not('Property' in s4.cell_value(3,3)) or not('Characteristic' in s4.cell_value(3,4))):
+                header_val.append("Characteristics To Products")
+                header_check=1
+        if(check1Clicked.Products_To_Units_check==0):
+            s5=open_text_file.workbook.sheet_by_name('Products To Units')
+            #if(s5.cell_value(3,3)==none):
+            print("Products To Units ",s5.ncols)
+            if(not('Production Line' in s5.cell_value(3,0)) or not('Production Unit' in s5.cell_value(3,1)) or not('Product Code' in s5.cell_value(3,2)) or not('Product' in s5.cell_value(3,3))):
+                header_val.append("Products To Units")
+                header_check=1
+        if(check1Clicked.Central_Spec_Variables_check==0):
+            s6=open_text_file.workbook.sheet_by_name('Central Spec Variables')
+            print("Central Spec Variables ",s6.ncols)
+            if(not('Product Property' in s6.cell_value(3,0)) or not('Central Spec Desc' in s6.cell_value(3,1)) or not('Data Type' in s6.cell_value(3,2)) or not('Precision' in s6.cell_value(3,3)) or not('Eng Units' in s6.cell_value(3,4)) or not('Tag' in s6.cell_value(3,5)) or not('Extended Info' in s6.cell_value(3,6)) or not('External Link' in s6.cell_value(3,7)) or not('Comment' in s6.cell_value(3,8))):
+                header_val.append("Central Spec Variables")
+                header_check=1
+        if(check1Clicked.Central_Specs_check==0):
+            s7=open_text_file.workbook.sheet_by_name('Central Specs')
+            print("Central Specs ",s7.ncols)
+            if(not('Product Property' in s7.cell_value(3,0)) or not('Specification Variable' in s7.cell_value(3,1)) or not('Characteristic' in s7.cell_value(3,2)) or not('Derived Spec' in s7.cell_value(3,3)) or not('LEL' in s7.cell_value(3,4)) or not('OverRide LE' in s7.cell_value(3,5)) or not('LRL' in s7.cell_value(3,6)) or not('OverRide LR' in s7.cell_value(3,7)) or not('LWL' in s7.cell_value(3,8)) or not('OverRide LW' in s7.cell_value(3,9)) or not('LUL' in s7.cell_value(3,10)) or not('OverRide LU' in s7.cell_value(3,11)) or not('TGT' in s7.cell_value(3,12)) or not('OverRide TGT' in s7.cell_value(3,13)) or not('UUL' in s7.cell_value(3,14)) or not('OverRide UU' in s7.cell_value(3,15)) or not('UWL' in s7.cell_value(3,16)) or not('OverRide UW' in s7.cell_value(3,17)) or not('URL' in s7.cell_value(3,18)) or not('OverRide UR' in s7.cell_value(3,19)) or not('UEL' in s7.cell_value(3,20)) or not('OverRide UE' in s7.cell_value(3,21)) or not('Fx' in s7.cell_value(3,22)) or not('OverRide Fx' in s7.cell_value(3,23)) or not('E-Signature Level' in s7.cell_value(3,24)) or not('OverRide ESig' in s7.cell_value(3,25)) or not('LCL' in s7.cell_value(3,26)) or not('OverRide LC' in s7.cell_value(3,27)) or not('TCL' in s7.cell_value(3,28)) or not('OverRide TC' in s7.cell_value(3,29)) or not('UCL' in s7.cell_value(3,30)) or not('OverRide UC' in s7.cell_value(3,31))):  
+                header_val.append("Central Specs")
+                header_check=1
+        if(check1Clicked.Reason_Tree_Column_Titles_check==0):
+            s8=open_text_file.workbook.sheet_by_name('Reason Tree Column Titles')
+            print("Reason Tree Column Titles ",s8.ncols)
+            if(not('Reason Tree Name' in s8.cell_value(4,0)) or not('Security' in s8.cell_value(4,1)) or not('Reason Level1' in s8.cell_value(4,2)) or not('Reason Level2' in s8.cell_value(4,3)) or not('Reason Level3' in s8.cell_value(4,4)) or not('Reason Level4' in s8.cell_value(4,5))):
+                header_val.append("Reason Tree Column Titles")
+                header_check=1
+        if(check1Clicked.Main_Tree_Data_check==0):
+            s9=open_text_file.workbook.sheet_by_name('Main Tree Data')
+            print("Main Tree Data ",s9.ncols)
+            if(not('Reason Tree Name' in s9.cell_value(7,0)) or not('DTSched' in s9.cell_value(7,5)) or not('DTSched' in s9.cell_value(7,6)) or not('DTGroup' in s9.cell_value(7,7)) or not('DTGroup' in s9.cell_value(7,8)) or not('DTMach' in s9.cell_value(7,9)) or not('DTMach' in s9.cell_value(7,10)) or not('DTType' in s9.cell_value(7,11))):
+                header_val.append("Main Tree Data")
+                header_check=1
+        if(check1Clicked.Main_Fault_Data_check==0):
+            header_fault_data=[]
+            fault_name=[]
+            for i in (open_text_file.workbook.sheet_names()):
+                if "Fault" in i:
+                    header_fault_data.append(open_text_file.workbook.sheet_by_name(i))
+                    fault_name.append(i)
+            for a,b in zip(header_fault_data,fault_name):
+                print(b," ",a.ncols)
+                if(not('Fault Value' in a.cell_value(4,0)) or not('Fault Name' in a.cell_value(4,1)) or not('Location' in a.cell_value(4,2)) or not('Reason' in a.cell_value(4,3)) or not('Reason' in a.cell_value(4,4)) or not('Reason' in a.cell_value(4,5)) or not('Reason' in a.cell_value(4,6))):
+                    header_val.append(b)
+                    header_check=1
+        if(check1Clicked.Displays_check==0):
+            s10=open_text_file.workbook.sheet_by_name('Displays')
+            print("Displays ",s10.ncols)
+            if(not('Display Group' in s10.cell_value(3,0)) or not('Display Name' in s10.cell_value(3,1)) or not('Display Type' in s10.cell_value(3,3)) or not('Master Unit' in s10.cell_value(3,4)) or not('Event Prompt' in s10.cell_value(3,5)) or not('Display Interval' in s10.cell_value(3,7)) or not('Display Offset' in s10.cell_value(3,8)) or not('Initial Count' in s10.cell_value(3,9)) or not('Max Count' in s10.cell_value(3,10)) or not('Max Edit' in s10.cell_value(3,11)) or not('Row Headers' in s10.cell_value(3,12)) or not('Column Headers' in s10.cell_value(3,13)) or not('Row Numbering' in s10.cell_value(3,14)) or not('Column Numbering' in s10.cell_value(3,15)) or not('Spec Window' in s10.cell_value(3,16)) or not('Spec Column' in s10.cell_value(3,17)) or not('Comment Window' in s10.cell_value(3,18)) or not('Display Event' in s10.cell_value(3,19)) or not('Display Date' in s10.cell_value(3,20)) or not('Display Time' in s10.cell_value(3,21)) or not('Display Product' in s10.cell_value(3,22)) or not('Display Var Order' in s10.cell_value(3,23)) or not('Display Data Type' in s10.cell_value(3,24)) or not('Display Data Source' in s10.cell_value(3,25)) or not('Display Specifications' in s10.cell_value(3,26)) or not('Display Prod Line' in s10.cell_value(3,27)) or not('Display Prod Unit' in s10.cell_value(3,28)) or not('Security Group' in s10.cell_value(3,29)) or not('Display Description' in s10.cell_value(3,30)) or not('Display Eng Units' in s10.cell_value(3,31)) or not('Dynamic Rows' in s10.cell_value(3,32)) or not('Wrap Product' in s10.cell_value(3,33)) or not('Label Print Status' in s10.cell_value(3,34)) or not('Maximum Inventory days' in s10.cell_value(3,35)) or not('Production Line' in s10.cell_value(3,36)) or not('Event Component Input' in s10.cell_value(3,37)) or not('Event SubType' in s10.cell_value(3,38))):
+                header_val.append("Displays")
+                header_check=1     
+                    
+        
+    if(len(header_val)!=0):
+                messagebox.showwarning("Warning", str(header_val) + " : header is not correct.")
+    if(SheetNotPresent==0 and header_check==0 and sheet_column_check_no==0):
+        open_text_file.sws1 = open_text_file.workbook.sheet_by_name('Plant Model')
+        if(check1Clicked.prod_check==0):
+            open_text_file.sws2 = open_text_file.workbook.sheet_by_name('Products')
+        if(check1Clicked.Characteristics_check==0):
+            open_text_file.sws3 = open_text_file.workbook.sheet_by_name('Characteristics ')
+        if(check1Clicked.Characteristics_To_Products_check==0):
+            open_text_file.sws4 = open_text_file.workbook.sheet_by_name('Characteristics To Products')
+        if(check1Clicked.Products_To_Units_check==0):
+            open_text_file.sws5 = open_text_file.workbook.sheet_by_name('Products To Units')
+        if(check1Clicked.Central_Spec_Variables_check==0):
+            open_text_file.sws6 = open_text_file.workbook.sheet_by_name('Central Spec Variables')
+        if(check1Clicked.Central_Specs_check==0):
+            open_text_file.sws7 = open_text_file.workbook.sheet_by_name('Central Specs')
+        if(check1Clicked.Reason_Tree_Column_Titles_check==0):
+            open_text_file.sws8 = open_text_file.workbook.sheet_by_name('Reason Tree Column Titles')
+        if(check1Clicked.Main_Tree_Data_check==0):
+            open_text_file.sws9 = open_text_file.workbook.sheet_by_name('Main Tree Data')
+        if(check1Clicked.Displays_check==0):
+            open_text_file.sws10 = open_text_file.workbook.sheet_by_name('Displays')    
+        btn3['state']=NORMAL
+       
+   
+    
+def button_hover(e):
+    btn2['bg']="#8ED6FF"
+def button_hover_leave(e):
+    btn2['bg']="SystemButtonFace"   
+btn2 = Button(root, text="Click to select CDW", fg='black',command=open_text_file)
+btn2.place(x=80, y=150)
+btn2.bind("<Enter>",button_hover)
+btn2.bind("<Leave>",button_hover_leave)
+#checking CDW
+def check_cdw_file():
+     master_invalid_condition=[]
+     master_invalid_condition_row=[]
+     master_not_available=[]
+     master_not_available_row=[]
+     fault_master=[]
+     fault_master_row=[]
+     main=0
+     count=0
+     error_fault_data=[]
+     fault_name=[]
+     error_fault_name=[]
+     if(check1Clicked.Main_Fault_Data_check==0):
+         for i in (open_text_file.workbook.sheet_names()):
+             if "Fault" in i:
+                 #print(i)
+                 error_fault_data.append(open_text_file.workbook.sheet_by_name(i))
+                 fault_name.append(i)
+         
+    #Check Fault location
+         for a,b in zip(error_fault_data,fault_name):
+             for i in range (5,a.nrows):
+                 main=0
+                 if(a.cell_value(i,2)!=""):
+                     for l in range(5,open_text_file.sws1.nrows):
+                         if(a.cell_value(i,2)==open_text_file.sws1.cell_value(l,2)):
+                             main=1
+                     if main==0:
+                         fault_master.append("This "+a.cell_value(i,2)+" production unit not present in the plant model sheet.")
+                         error_fault_name.append(b)
+                         fault_master_row.append(i+1)
+                         count+=1
+                       
+#Check target value
+     tar=0
+     if(check1Clicked.Central_Specs_check==0):       
+        Centralspec_Error=[]
+        Centralspec_RowNum=[]
+        for a in range(4,open_text_file.sws7.nrows):
+            print (open_text_file.sws7.nrows)
+            if(open_text_file.sws7.cell_value(a,0)!= "") :
+                if(open_text_file.sws7.cell_value(a,1)!="" and open_text_file.sws7.cell_value(a,2)!="" and open_text_file. sws7.cell_value(a,12)!=""):
+                    continue
+                elif(open_text_file.sws7.cell_value(a,1)=="" and open_text_file.sws7.cell_value(a,2)!="" and open_text_file.sws7.cell_value(a,12)!=""):
+                    tar=1
+                    Centralspec_Error.append("Specification is not present")
+                    Centralspec_RowNum.append(a+1)                 
+                        #Specification Variable is not present 
+                elif(open_text_file.sws7.cell_value(a,1)!="" and open_text_file.sws7.cell_value(a,2)=="" and open_text_file.sws7.cell_value(a,12)!=""):
+                    tar=1
+                    Centralspec_Error.append("Characteristic is not present")
+                    Centralspec_RowNum.append(a+1) 
+                         #Characteristic is not present 
+                elif(open_text_file.sws7.cell_value(a,1)!="" and open_text_file.sws7.cell_value(a,2)!="" and open_text_file.sws7.cell_value(a,12)==""):
+                    tar=1
+                    Centralspec_Error.append("Target value is not present")
+                    Centralspec_RowNum.append(a+1)
+                       #Target value is not present for the line
+                elif(open_text_file.sws7.cell_value(a,1)=="" and open_text_file.sws7.cell_value(a,2)=="" and open_text_file.sws7.cell_value(a,12)!=""):
+                    tar=1
+                    Centralspec_Error.append("Specification Variable,Characteristic is not present")
+                    Centralspec_RowNum.append(a+1)
+                           #Specification Variable,Characteristic is not present for the line
+                elif(open_text_file.sws7.cell_value(a,1)=="" and open_text_file.sws7.cell_value(a,2)!="" and open_text_file.sws7.cell_value(a,12)==""):
+                    tar=1
+                    Centralspec_Error.append("Specification Variable,Target value is not present")
+                    Centralspec_RowNum.append(a+1)
+                                                              
+                elif(open_text_file.sws7.cell_value(a,1)!="" and open_text_file.sws7.cell_value(a,2)=="" and open_text_file.sws7.cell_value(a,12)==""):
+                    tar=1
+                    Centralspec_Error.append("Characteristic,Target value is not present")
+                    Centralspec_RowNum.append(a+1)
+                elif(open_text_file.sws7.cell_value(a,1)=="" and open_text_file.sws7.cell_value(a,2)=="" and open_text_file.sws7.cell_value(a,12)==""):
+                    tar=1
+                    Centralspec_Error.append("Specification Variable,Characteristic,Target value is not present")
+                    Centralspec_RowNum.append(a+1)
+            else :
+                if(open_text_file.sws7.cell_value(a,1)!="" and open_text_file.sws7.cell_value(a,2)!="" and open_text_file.sws7.cell_value(a,12)!=""):
+                    tar=1
+                    Centralspec_Error.append(" Product Property is not present")
+                    Centralspec_RowNum.append(a+1)            
+                elif(open_text_file.sws7.cell_value(a,1)!="" and open_text_file.sws7.cell_value(a,2)=="" and open_text_file.sws7.cell_value(a,12)==""):
+                    tar=1
+                    Centralspec_Error.append(" Product Property,characteristic,target value is not present")
+                    Centralspec_RowNum.append(a+1)
+                elif(open_text_file.sws7.cell_value(a,1)!="" and open_text_file.sws7.cell_value(a,2)!="" and open_text_file.sws7.cell_value(a,12)==""):
+                     tar=1
+                     Centralspec_Error.append(" Product Property,target value is not present")
+                     Centralspec_RowNum.append(a+1)                 
+                     
+            if(open_text_file.sws7.cell_value(a,1)== ""):
+                if(open_text_file.sws7.cell_value(a,0)=="" and open_text_file.sws7.cell_value(a,2)=="" and open_text_file.sws7.cell_value(a,12)==""):
+                    tar=1
+                    Centralspec_Error.append("Product Property,Characteristic,Target value,Specification Variable is not present")
+                    Centralspec_RowNum.append(a+1)
+                elif(open_text_file.sws7.cell_value(a,0)=="" and open_text_file.sws7.cell_value(a,2)!="" and open_text_file.sws7.cell_value(a,12)==""):
+                    tar=1
+                    Centralspec_Error.append("Product Property,Target value,Specification Variable is not present")
+                    Centralspec_RowNum.append(a+1)
+                elif(open_text_file.sws7.cell_value(a,0)=="" and open_text_file.sws7.cell_value(a,2)=="" and open_text_file.sws7.cell_value(a,12)!=""):
+                    tar=1
+                    Centralspec_Error.append("Product Property,Characteristic,Specification Variable is not present")
+                    Centralspec_RowNum.append(a+1)
+                elif(open_text_file.sws7.cell_value(a,0)=="" and open_text_file.sws7.cell_value(a,2)!="" and open_text_file.sws7.cell_value(a,12)!=""):
+                    tar=1
+                    Centralspec_Error.append("Product Property,Specification Variable is not present")
+                    Centralspec_RowNum.append(a+1)
+                 
+         
+#Check master un
+     
+     mas1=0
+     mas=0     
+     # if(check0Clicked.Plant_Model_check==1):   
+     maxrow = open_text_file.sws1.nrows
+     master=[]
+     for row1 in range(5,maxrow):
+       if open_text_file.sws1.cell_value(row1,3) != "" :
+           if open_text_file.sws1.cell_value(row1,3) in master:
+               continue
+           master.append(open_text_file.sws1.cell_value(row1,3))
+     for x in master:     
+       b=2
+       c=0
+       for row2 in range(5, maxrow):
+           if(b==0):
+               b=2
+               break
+           cell2 = open_text_file.sws1.cell_value(row2,2)     
+           if(cell2 != ""):
+               a = (open_text_file.sws1.cell_value(row2,3))
+               if x == cell2:                                    
+                   b = 0
+                   c=1                                           
+                   if a != "" :
+                       master_invalid_condition.append("This "+x+" doesn't meet the condition.")
+                       master_invalid_condition_row.append(row2+1)
+                       mas1=1
+       if(c==0 and x != ""):
+           master_not_available.append(x+" please check master unit is same as production unit.")
+           for row1 in range(5,maxrow):
+               if(x==open_text_file.sws1.cell_value(row1,3)):
+                   master_not_available_row.append(row1+1)
+                   break
+           mas=1
+
+         
+#Error sheet creation
+     if(tar==1 or mas1==1 or mas==1 or count > 0):
+         messagebox.showerror("Validation error", "Error occur")
+         workbook2=xlsxwriter.Workbook('Validation_Report.xlsx')
+         error= workbook2.add_worksheet('Validation Error')
+         cell1_format = workbook2.add_format({'font_color': '#FFFFFF','font_name':'Calibri'}) 
+         cell1_format.set_font_size(11)
+         cell1_format.set_align('general')
+         cell1_format.set_align('bottom')
+         cell1_format.set_bg_color('#0000FF')
+         cell1_format.set_border(2)
+         error.write('A1','Sheet Name',cell1_format)
+         error.write('B1','Row No',cell1_format)
+         error.write('C1','Type of Error',cell1_format)
+         error.set_column(0,0,18.43)
+         error.set_column(1,1,16)
+         error.set_column(2,2,89.57)
+         error.set_row(0,15.75)
+         d=0
+         #if(check0Clicked.Plant_Model_check==1):
+         if (len(master_invalid_condition)!=0):
+             for i,j in zip(master_invalid_condition,master_invalid_condition_row):
+                 d+=1
+                 error.write(d, 0, 'Plant Model')
+                 error.write(d, 1, j)
+                 error.write(d, 2, i)
+         if(len(master_not_available)>0):
+             for i,j in zip(master_not_available,master_not_available_row):
+                 d+=1
+                 error.write(d, 0, 'Plant Model')
+                 error.write(d, 1, j)
+                 error.write(d, 2, i)    
+         if(check1Clicked.Central_Specs_check==0):
+             if(len(Centralspec_Error)!=0):
+                 for i,j in zip(Centralspec_Error,Centralspec_RowNum):
+                     d+=1
+                     error.write(d, 0, 'Central Spec')
+                     error.write(d, 1, j)
+                     error.write(d, 2, i)
+         if(check1Clicked.Main_Fault_Data_check==0):
+             if(len(fault_master)!=0):
+                 for i,j,k in zip(fault_master,fault_master_row,error_fault_name):
+                     d+=1
+                     error.write(d, 0, k)
+                     error.write(d, 1, j)
+                     error.write(d, 2, i)
+         workbook2.close()
+         os.system('Validation_Report.xlsx')
+
+#Validation successful message box         
+     if(tar==0 and mas1==0 and mas==0 and count ==0):
+         messagebox.showinfo("Validationn report", "Validation suessfully")
+         btn4['state']=NORMAL
+box3 = tk.Label(root, 
+            text="Click button to Validate CDW",
+                    		 fg = "BLACK",
+                   		 font = ("Times new roman",15),background='#FFFFFF')
+box3.place(x=5, y=250)
+def button_hover(e):
+    btn3['bg']="#8ED6FF"
+def button_hover_leave(e):
+    btn3['bg']="SystemButtonFace"
+btn3 = Button(root, text="Click to Validate CDW", fg='black',state = DISABLED,command=check_cdw_file)
+btn3.place(x=80, y=350)
+btn3.bind("<Enter>",button_hover)
+btn3.bind("<Leave>",button_hover_leave)
+box4 = tk.Label(root, 
+   		 text="Click button to Create Import sheet",
+    		 fg = "BLACK",
+   		 font = ("Times new roman",15),background='#FFFFFF')
+box4.place(x=950, y=590)
+
+#import sheet creation
+def start_app():
+    root.destroy()
+    workbook1=xlsxwriter.Workbook('importsheet.xlsx')
+    #if(check0Clicked.Plant_Model_check==1):
+    unit_import_sheet= workbook1.add_worksheet('Units')
+    if(check1Clicked.prod_check==0):
+        prodfamily_import_sheet= workbook1.add_worksheet('ProdFamily')
+    if(check1Clicked.Characteristics_check==0):
+        characteristics_import_sheet= workbook1.add_worksheet('Characteristics')
+    if(check1Clicked.Characteristics_To_Products_check==0):
+        product_Characteristics_import_sheet= workbook1.add_worksheet('ProductCharacteristics')
+    if(check1Clicked.Products_To_Units_check==0):
+        products_to_units_import_sheet= workbook1.add_worksheet('ProductsToUnits')
+    if(check1Clicked.Central_Spec_Variables_check==0):
+       specVariables_import_sheet= workbook1.add_worksheet('SpecVariables')
+    if(check1Clicked.Central_Specs_check==0):
+        centralSpecs_import_sheet= workbook1.add_worksheet('CentralSpecs')
+    if(check1Clicked.Reason_Tree_Column_Titles_check==0):
+        reason_tree_import_sheet= workbook1.add_worksheet('ReasonTree')
+    if(check1Clicked.Main_Tree_Data_check==0):
+        event_reason_tree_import_sheet= workbook1.add_worksheet('EventReasonTree')
+    if(check1Clicked.Main_Fault_Data_check==0):
+        faults_import_sheet= workbook1.add_worksheet('TimeEventFualt Main')
+    if(check1Clicked.Displays_check==0):
+        display_import_sheet= workbook1.add_worksheet('Displays')    
+    cell_format = workbook1.add_format({'font_color': '#0000FF','font_name':'Calibri'}) 
+    cell_format.set_font_size(11)
+    cell_format.set_align('general')
+    cell_format.set_align('bottom')
+    cell_format.set_bg_color('#C0C0C0')
+    cell_format.set_border(2)
+    fault_data=[]
+    for i in (open_text_file.workbook.sheet_names()):
+        if "Fault" in i:
+            fault_data.append(open_text_file.workbook.sheet_by_name(i))
+    
+    
+    
+#unit
+    #if(check0Clicked.Plant_Model_check==1):
+    unit_import_sheet.write_comment('B2', '(X) to Select', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+    unit_import_sheet.write_comment('D2', 'Max Length(50)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+    unit_import_sheet.write_comment('E2', 'Max Length(50)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+    unit_import_sheet.write_comment('F2', 'Max Length(50)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+    unit_import_sheet.write_comment('G2', 'Max Length(255)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+    unit_import_sheet.write_comment('H2', 'Max Length(30)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+    unit_import_sheet.write_comment('I2', 'Max Length(255)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+    unit_import_sheet.write_comment('J2', 'True/False', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+    unit_import_sheet.write('A1', 'Units',cell_format)
+    unit_import_sheet.write('A2', 'Return Messages',cell_format)
+    unit_import_sheet.write('B2', 'Selected',cell_format)
+    unit_import_sheet.write('C2', 'Department',cell_format)
+    unit_import_sheet.write('D2', 'Production Line',cell_format)
+    unit_import_sheet.write('E2', 'Production Unit',cell_format)
+    unit_import_sheet.write('F2', 'Master Unit',cell_format)
+    unit_import_sheet.write('G2', 'External Link',cell_format)
+    unit_import_sheet.write('H2', 'Security User Group',cell_format)
+    unit_import_sheet.write('I2', 'Extended Info',cell_format)
+    unit_import_sheet.write('J2', 'Uses Start Time',cell_format)
+    unit_import_sheet.set_column(0,0,17.43)
+    unit_import_sheet.set_column(1,1,14.71)
+    unit_import_sheet.set_column(2,2,20.14)
+    unit_import_sheet.set_column(3,3,15.71)
+    unit_import_sheet.set_column(4,4,27.29)
+    unit_import_sheet.set_column(5,5,21.57)
+    unit_import_sheet.set_column(6,6,12.86)
+    unit_import_sheet.set_column(7,7,19.86)
+    unit_import_sheet.set_column(8,8,14.14)
+    unit_import_sheet.set_column(9,9,15.86)
+    unit_import_sheet.set_row(0,15.75)
+    unit_import_sheet.set_row(1,15.75)
+    k=1
+    for i in range (5,open_text_file.sws1.nrows):
+        m=2
+        k=k+1
+        for j in range (0,4):
+            temp=open_text_file.sws1.cell_value(rowx=i,colx=j)
+            if (temp!=""):
+                if m==2:
+                    unit_import_sheet.write(k,1,'x')
+                    unit_import_sheet.write(k,9,'FALSE')
+                unit_import_sheet.write ( k, m, temp) 
+                m=m+1
+
+    
+#prodfamily       
+    if(check1Clicked.prod_check==0):
+        prodfamily_import_sheet.write_comment('B2', '(X) to Select', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        prodfamily_import_sheet.write_comment('C2', 'Max Length (25)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        prodfamily_import_sheet.write_comment('D2', 'Max Length(50)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        prodfamily_import_sheet.write_comment('E2', 'Max Length (1000)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        prodfamily_import_sheet.write_comment('F2', 'Max Length(50)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        prodfamily_import_sheet.write_comment('G2', 'Max Length (1000)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        prodfamily_import_sheet.write_comment('H2', 'Undefined User Level Approver Level', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        prodfamily_import_sheet.write_comment('I2', 'Undefined User Level Approver Level', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        prodfamily_import_sheet.write('A1', 'ProdFamily',cell_format)
+        prodfamily_import_sheet.write('A2', 'Return Messages',cell_format)
+        prodfamily_import_sheet.write('B2', 'Selected',cell_format)
+        prodfamily_import_sheet.write('C2', 'Product Code',cell_format)
+        prodfamily_import_sheet.write('D2', 'Product Description',cell_format)
+        prodfamily_import_sheet.write('E2', 'Product Comments',cell_format)
+        prodfamily_import_sheet.write('F2', 'Product Family',cell_format)
+        prodfamily_import_sheet.write('G2', 'Family Comments',cell_format)
+        prodfamily_import_sheet.write('H2', 'Event E-Sig Level',cell_format)
+        prodfamily_import_sheet.write('I2', 'Product Change E-Sig Level',cell_format)
+        prodfamily_import_sheet.set_row(0,15.75)
+        prodfamily_import_sheet.set_row(1,15.75)
+        prodfamily_import_sheet.set_column(0,0,36)
+        prodfamily_import_sheet.set_column(1,1,14.29)
+        prodfamily_import_sheet.set_column(2,2,18.71)
+        prodfamily_import_sheet.set_column(3,3,54.43)
+        prodfamily_import_sheet.set_column(4,4,34)
+        prodfamily_import_sheet.set_column(5,5,37.43)
+        prodfamily_import_sheet.set_column(6,6,51.43)
+        prodfamily_import_sheet.set_column(7,7,15.29)
+        prodfamily_import_sheet.set_column(8,8,24.43)
+        k=1
+        for i in range (5,open_text_file.sws2.nrows):
+            m=2
+            k=k+1
+            for j in range (0,3):
+                if m==4:
+                    m+=1
+                temp=open_text_file.sws2.cell_value(rowx=i,colx=j)
+                if (temp!=""):
+                    if m==2:
+                        prodfamily_import_sheet.write(k,1,'x')
+                    prodfamily_import_sheet.write ( k, m, temp) 
+                    m=m+1
+    
+    
+#Characteristics
+    if(check1Clicked.Characteristics_check==0):
+        characteristics_import_sheet.write_comment('B2', '(X) to Select', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        characteristics_import_sheet.write_comment('C2', 'Max Length(50)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        characteristics_import_sheet.write_comment('D2', 'Max Length(50)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        characteristics_import_sheet.write_comment('E2', 'Max Length(50)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        characteristics_import_sheet.write_comment('F2', 'Max Length(255)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        characteristics_import_sheet.write_comment('G2', 'Max Length(255)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        characteristics_import_sheet.write('A1', 'Characteristics',cell_format)
+        characteristics_import_sheet.write('A2', 'Return Messages',cell_format)
+        characteristics_import_sheet.write('B2', 'Selected',cell_format)
+        characteristics_import_sheet.write('C2', 'Product Property',cell_format)
+        characteristics_import_sheet.write('D2', 'Characteristic',cell_format)
+        characteristics_import_sheet.write('E2', 'Parent Characteristic',cell_format)
+        characteristics_import_sheet.write('F2', 'Extended Information',cell_format)
+        characteristics_import_sheet.write('G2', 'External Link',cell_format)
+        characteristics_import_sheet.set_row(0,15.75)
+        characteristics_import_sheet.set_row(1,15.75)
+        characteristics_import_sheet.set_column(0,0,15.43)
+        characteristics_import_sheet.set_column(1,1,15.29)
+        characteristics_import_sheet.set_column(2,2,40.57)
+        characteristics_import_sheet.set_column(3,3,32.14)
+        characteristics_import_sheet.set_column(4,4,18.86)
+        characteristics_import_sheet.set_column(5,5,20)
+        characteristics_import_sheet.set_column(6,6,11.57)
+        k=1
+        for i in range (5,open_text_file.sws3.nrows):
+            m=2
+            k=k+1
+            for j in range (0,2):
+                temp=open_text_file.sws3.cell_value(rowx=i,colx=j)
+                if (temp!=""):
+                    if m==2:
+                        characteristics_import_sheet.write(k,1,'x')
+                    characteristics_import_sheet.write ( k, m, temp) 
+                    m=m+1
+        
+    
+#ProductCharacteristics
+    if(check1Clicked.Characteristics_To_Products_check==0):
+        product_Characteristics_import_sheet.write_comment('B2', '(X) to Select', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        product_Characteristics_import_sheet.write_comment('C2', 'Max Length(50)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        product_Characteristics_import_sheet.write_comment('D2', 'Max Length(50)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        product_Characteristics_import_sheet.write_comment('E2', 'Max Length (25)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        product_Characteristics_import_sheet.write_comment('F2', 'Max Length(50)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        product_Characteristics_import_sheet.write_comment('G2', 'Max Length(50)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        product_Characteristics_import_sheet.write('A1', 'ProductCharacteristics',cell_format)
+        product_Characteristics_import_sheet.write('A2', 'Return Messages',cell_format)
+        product_Characteristics_import_sheet.write('B2', 'Selected',cell_format)
+        product_Characteristics_import_sheet.write('C2', 'Production Line',cell_format)
+        product_Characteristics_import_sheet.write('D2', 'Production Unit',cell_format)
+        product_Characteristics_import_sheet.write('E2', 'Product Code',cell_format)
+        product_Characteristics_import_sheet.write('F2', 'Product Property',cell_format)
+        product_Characteristics_import_sheet.write('G2', 'Characteristic',cell_format)
+        product_Characteristics_import_sheet.set_row(0,15.75)
+        product_Characteristics_import_sheet.set_row(1,15.75)
+        product_Characteristics_import_sheet.set_column(0,0,39.57)
+        product_Characteristics_import_sheet.set_column(1,1,22.43)
+        product_Characteristics_import_sheet.set_column(2,2,15.71)
+        product_Characteristics_import_sheet.set_column(3,3,25.86)
+        product_Characteristics_import_sheet.set_column(4,4,15.86)
+        product_Characteristics_import_sheet.set_column(5,5,36.86)
+        product_Characteristics_import_sheet.set_column(6,6,24.86)
+        k=1
+        for i in range (4,open_text_file.sws4.nrows):
+            m=2
+            k=k+1
+            for j in range (0,5):
+                temp=open_text_file.sws4.cell_value(rowx=i,colx=j)
+                if (temp!=""):
+                    if m==2:
+                        product_Characteristics_import_sheet.write(k,1,'x')
+                product_Characteristics_import_sheet.write ( k, m, temp) 
+                m=m+1
+            
+#ProductsToUnits
+    if(check1Clicked.Products_To_Units_check==0):
+        products_to_units_import_sheet.write_comment('B2', '(X) to Select', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        products_to_units_import_sheet.write_comment('C2', 'Max Length(50)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        products_to_units_import_sheet.write_comment('D2', 'Max Length(50)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        products_to_units_import_sheet.write_comment('E2', 'Max Length (25)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        products_to_units_import_sheet.write_comment('F2', 'Max Length(255)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        products_to_units_import_sheet.write('A1', 'ProductsToUnits',cell_format)
+        products_to_units_import_sheet.write('A2', 'Return Messages',cell_format)
+        products_to_units_import_sheet.write('B2', 'Selected',cell_format)
+        products_to_units_import_sheet.write('C2', 'Production Line',cell_format)
+        products_to_units_import_sheet.write('D2', 'Production Unit',cell_format)
+        products_to_units_import_sheet.write('E2', 'Product Code',cell_format)
+        products_to_units_import_sheet.write('F2', 'Product Xref',cell_format)
+        products_to_units_import_sheet.set_row(0,15.75)
+        products_to_units_import_sheet.set_row(1,15.75)
+        products_to_units_import_sheet.set_column(0,0,17.43)
+        products_to_units_import_sheet.set_column(1,1,16.43)
+        products_to_units_import_sheet.set_column(2,2,15.71)
+        products_to_units_import_sheet.set_column(3,3,27.71)
+        products_to_units_import_sheet.set_column(4,4,13)
+        products_to_units_import_sheet.set_column(5,5,11.29)
+        k=1
+        for i in range (4,open_text_file.sws5.nrows):
+            m=2
+            k=k+1
+            for j in range (0,4):
+                temp=open_text_file.sws5.cell_value(rowx=i,colx=j)
+                if (temp!=""):
+                    if m==2:
+                        products_to_units_import_sheet.write(k,1,'x')
+                products_to_units_import_sheet.write ( k, m, temp) 
+                m=m+1
+            
+            
+#SpecVariables
+    if(check1Clicked.Central_Spec_Variables_check==0):
+        specVariables_import_sheet.write_comment('B2', '(X) to Select', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        specVariables_import_sheet.write_comment('C2', 'Max Length(50)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        specVariables_import_sheet.write_comment('D2', 'Max Length(50)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        specVariables_import_sheet.write_comment('E2', '(System Data Types) Array Float Array Integer Array String Comment Float Integer Logical String', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        specVariables_import_sheet.write_comment('G2', 'Max Length(15)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        specVariables_import_sheet.write_comment('H2', 'Max Length(50)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        specVariables_import_sheet.write_comment('I2', 'Max Length(255)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        specVariables_import_sheet.write_comment('J2', 'Max Length(255)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        specVariables_import_sheet.write_comment('K2', 'Max Length (1000)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        specVariables_import_sheet.write('A1', 'SpecVariables',cell_format)
+        specVariables_import_sheet.write('A2', 'Return Messages',cell_format)
+        specVariables_import_sheet.write('B2', 'Selected',cell_format)
+        specVariables_import_sheet.write('C2', 'Product Property',cell_format)
+        specVariables_import_sheet.write('D2', 'Central Spec Desc',cell_format)
+        specVariables_import_sheet.write('E2', 'Data Type',cell_format)
+        specVariables_import_sheet.write('F2', 'Precision',cell_format)
+        specVariables_import_sheet.write('G2', 'Eng Units',cell_format)
+        specVariables_import_sheet.write('H2', 'Tag',cell_format)
+        specVariables_import_sheet.write('I2', 'Extended Info',cell_format)
+        specVariables_import_sheet.write('J2', 'External Link',cell_format)
+        specVariables_import_sheet.write('K2', 'Comment',cell_format)
+        specVariables_import_sheet.set_column(0,0,17.43)
+        specVariables_import_sheet.set_column(1,1,14.57)
+        specVariables_import_sheet.set_column(2,2,36.14)
+        specVariables_import_sheet.set_column(3,3,33.43)
+        specVariables_import_sheet.set_column(4,4,10.14)
+        specVariables_import_sheet.set_column(5,5,9.43)
+        specVariables_import_sheet.set_column(6,6,19.29)
+        specVariables_import_sheet.set_column(7,7,3.86)
+        specVariables_import_sheet.set_column(8,8,14.14)
+        specVariables_import_sheet.set_column(9,9,12.86)
+        specVariables_import_sheet.set_column(10,10,9.57)
+        specVariables_import_sheet.set_row(0,15.75)
+        specVariables_import_sheet.set_row(1,15.75)
+        k=1
+        for i in range (4,open_text_file.sws6.nrows):
+            m=2
+            k=k+1
+            for j in range (0,9):
+                temp=open_text_file.sws6.cell_value(rowx=i,colx=j)
+                if (temp!=""):
+                    if m==2:
+                        specVariables_import_sheet.write(k,1,'x')
+                specVariables_import_sheet.write ( k, m, temp) 
+                m=m+1
+            
+#CentralSpecs
+    if(check1Clicked.Central_Specs_check==0):
+        centralSpecs_import_sheet.write_comment('B2', '(X) to Select', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        centralSpecs_import_sheet.write_comment('C2', 'Max Length(50)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        centralSpecs_import_sheet.write_comment('D2', 'Max Length(50)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        centralSpecs_import_sheet.write_comment('E2', 'Max Length(50)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        centralSpecs_import_sheet.write_comment('F2', 'True/False', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        centralSpecs_import_sheet.write_comment('G2', 'Max Length(25)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        centralSpecs_import_sheet.write_comment('H2', 'True/False', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        centralSpecs_import_sheet.write_comment('I2', 'True/False', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        centralSpecs_import_sheet.write_comment('J2', 'True/False', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        centralSpecs_import_sheet.write_comment('K2', 'Max Length(25)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        centralSpecs_import_sheet.write_comment('L2', 'True/False', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        centralSpecs_import_sheet.write_comment('M2', 'Max Length(25)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        centralSpecs_import_sheet.write_comment('N2', 'True/False', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        centralSpecs_import_sheet.write_comment('O2', 'Max Length(25)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        centralSpecs_import_sheet.write_comment('P2', 'True/False', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        centralSpecs_import_sheet.write_comment('Q2', 'Max Length(25)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        centralSpecs_import_sheet.write_comment('R2', 'True/False', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        centralSpecs_import_sheet.write_comment('S2', 'Max Length(25)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        centralSpecs_import_sheet.write_comment('T2', 'True/False', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        centralSpecs_import_sheet.write_comment('U2', 'Max Length(25)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        centralSpecs_import_sheet.write_comment('V2', 'True/False', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        centralSpecs_import_sheet.write_comment('W2', 'Max Length(25)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        centralSpecs_import_sheet.write_comment('X2', 'True/False', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        centralSpecs_import_sheet.write_comment('Y2', 'Integer', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        centralSpecs_import_sheet.write_comment('Z2', 'True/False', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        centralSpecs_import_sheet.write_comment('AA2', 'Undefined User Level Approver Level', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        centralSpecs_import_sheet.write_comment('AB2', 'True/False', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        centralSpecs_import_sheet.write_comment('AC2', 'Max Length(25)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        centralSpecs_import_sheet.write_comment('AD2', 'True/False', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        centralSpecs_import_sheet.write_comment('AE2', 'Max Length(25)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        centralSpecs_import_sheet.write_comment('AF2', 'True/False', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        centralSpecs_import_sheet.write_comment('AG2', 'Max Length(25)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        centralSpecs_import_sheet.write_comment('AH2', 'True/False', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        centralSpecs_import_sheet.write('A1', 'CentralSpecs',cell_format)
+        centralSpecs_import_sheet.write('A2', 'Return Messages',cell_format)
+        centralSpecs_import_sheet.write('B2', 'Selected',cell_format)
+        centralSpecs_import_sheet.write('C2', 'Product Property',cell_format)
+        centralSpecs_import_sheet.write('D2', 'Specification Variable',cell_format)
+        centralSpecs_import_sheet.write('E2', 'Characteristic',cell_format)
+        centralSpecs_import_sheet.write('F2', 'Derived Spec',cell_format)
+        centralSpecs_import_sheet.write('G2', 'LEL',cell_format)
+        centralSpecs_import_sheet.write('H2', 'OverRide LE',cell_format)
+        centralSpecs_import_sheet.write('I2', 'LRL',cell_format)
+        centralSpecs_import_sheet.write('J2', 'OverRide LR',cell_format)
+        centralSpecs_import_sheet.write('K2', 'LWL',cell_format)
+        centralSpecs_import_sheet.write('L2', 'OverRide LW',cell_format)
+        centralSpecs_import_sheet.write('M2', 'LUL',cell_format)
+        centralSpecs_import_sheet.write('N2', 'OverRide LU',cell_format)
+        centralSpecs_import_sheet.write('O2', 'TGT',cell_format)
+        centralSpecs_import_sheet.write('P2', 'OverRide TGT',cell_format)
+        centralSpecs_import_sheet.write('Q2', 'UUL',cell_format)
+        centralSpecs_import_sheet.write('R2', 'OverRide UU',cell_format)
+        centralSpecs_import_sheet.write('S2', 'UWL',cell_format)
+        centralSpecs_import_sheet.write('T2', 'OverRide UW',cell_format)
+        centralSpecs_import_sheet.write('U2', 'URL',cell_format)
+        centralSpecs_import_sheet.write('V2', 'OverRide UR',cell_format)
+        centralSpecs_import_sheet.write('W2', 'UEL',cell_format)
+        centralSpecs_import_sheet.write('X2', 'OverRide UE',cell_format)
+        centralSpecs_import_sheet.write('Y2', 'Fx',cell_format)
+        centralSpecs_import_sheet.write('Z2', 'OverRide Fx',cell_format)
+        centralSpecs_import_sheet.write('AA2', 'E-Signature Level',cell_format)
+        centralSpecs_import_sheet.write('AB2', 'OverRide ESig',cell_format)
+        centralSpecs_import_sheet.write('AC2', 'LCL',cell_format)
+        centralSpecs_import_sheet.write('AD2', 'OverRide LC',cell_format)
+        centralSpecs_import_sheet.write('AE2', 'TCL',cell_format)
+        centralSpecs_import_sheet.write('AF2', 'OverRide TC',cell_format)
+        centralSpecs_import_sheet.write('AG2', 'UCL',cell_format)
+        centralSpecs_import_sheet.write('AH2', 'OverRide UC',cell_format)
+        centralSpecs_import_sheet.set_column(0,0,15.43)
+        centralSpecs_import_sheet.set_column(1,1,12.86)
+        centralSpecs_import_sheet.set_column(2,2,30)
+        centralSpecs_import_sheet.set_column(3,3,35.43)
+        centralSpecs_import_sheet.set_column(4,4,25.14)
+        centralSpecs_import_sheet.set_column(5,5,13)
+        centralSpecs_import_sheet.set_column(6,6,3.43)
+        centralSpecs_import_sheet.set_column(7,7,10.86)
+        centralSpecs_import_sheet.set_column(8,8,4.57)
+        centralSpecs_import_sheet.set_column(9,9,11)
+        centralSpecs_import_sheet.set_column(10,10,3.86)
+        centralSpecs_import_sheet.set_column(11,11,11.71)
+        centralSpecs_import_sheet.set_column(12,12,3.29)
+        centralSpecs_import_sheet.set_column(13,13,11.14)
+        centralSpecs_import_sheet.set_column(14,14,5.86)
+        centralSpecs_import_sheet.set_column(15,15,13.57)
+        centralSpecs_import_sheet.set_column(16,16,3.71)
+        centralSpecs_import_sheet.set_column(17,17,11.57)
+        centralSpecs_import_sheet.set_column(18,18,4.29)
+        centralSpecs_import_sheet.set_column(19,19,12.14)
+        centralSpecs_import_sheet.set_column(20,20,3.86)
+        centralSpecs_import_sheet.set_column(21,21,11.43)
+        centralSpecs_import_sheet.set_column(22,22,3.43)
+        centralSpecs_import_sheet.set_column(23,23,11.29)
+        centralSpecs_import_sheet.set_column(24,24,2.29)
+        centralSpecs_import_sheet.set_column(25,25,11)
+        centralSpecs_import_sheet.set_column(26,26,15.71)
+        centralSpecs_import_sheet.set_column(27,27,12.71)
+        centralSpecs_import_sheet.set_column(28,28,3.14)
+        centralSpecs_import_sheet.set_column(29,29,11)
+        centralSpecs_import_sheet.set_column(30,30,3.29)
+        centralSpecs_import_sheet.set_column(31,31,11.14)
+        centralSpecs_import_sheet.set_column(32,32,3.57)
+        centralSpecs_import_sheet.set_column(33,33,11.43)
+        centralSpecs_import_sheet.set_row(0,15.75)
+        centralSpecs_import_sheet.set_row(1,15.75)
+        
+        k=1
+        for i in range (4,open_text_file.sws7.nrows):
+            m=2
+            k=k+1
+            for j in range (0,31):
+                temp=open_text_file.sws7.cell_value(rowx=i,colx=j)
+                if (temp!=""):
+                    if m==2:
+                        centralSpecs_import_sheet.write(k,1,'x')
+                    
+                centralSpecs_import_sheet.write ( k, m, temp) 
+                if (m==6 or m==8 or m==10 or m==12 or m==16 or m==18 or m==20 or m==22 or m==24 or m==26 or m==28 or m==30 or m==32):
+                    centralSpecs_import_sheet.write(k,m+1,'FALSE')
+                if (m==14):
+                    centralSpecs_import_sheet.write(k,m+1,'TRUE')
+                m=m+1
+            
+#Reason Tree 
+    if(check1Clicked.Reason_Tree_Column_Titles_check==0):
+        reason_tree_import_sheet.write_comment('B2', '(X) to Select', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        reason_tree_import_sheet.write('A1', 'ReasonTrees',cell_format)
+        reason_tree_import_sheet.write('A2', 'Return Messages',cell_format)
+        reason_tree_import_sheet.write('B2', 'Selected',cell_format)
+        reason_tree_import_sheet.write('C2', 'Reason TreeName',cell_format)
+        reason_tree_import_sheet.write('D2', 'Security Group',cell_format)
+        reason_tree_import_sheet.write('E2', 'Level-1 Title',cell_format)
+        reason_tree_import_sheet.write('F2', 'Level-2 Title',cell_format)
+        reason_tree_import_sheet.write('G2', 'Level-3 Title',cell_format)
+        reason_tree_import_sheet.write('H2', 'Level-4 Title',cell_format)
+        reason_tree_import_sheet.set_row(0,15.75)
+        reason_tree_import_sheet.set_row(1,15.75)
+        reason_tree_import_sheet.set_column(0,0,15.43)
+        reason_tree_import_sheet.set_column(1,1,12.86)
+        reason_tree_import_sheet.set_column(2,2,23.00)
+        reason_tree_import_sheet.set_column(3,3,17.43)
+        reason_tree_import_sheet.set_column(4,4,20.71)
+        reason_tree_import_sheet.set_column(5,5,14.00)
+        reason_tree_import_sheet.set_column(6,6,14.43)
+        reason_tree_import_sheet.set_column(7,7,15.14)
+        k=1
+        for i in range (5,open_text_file.sws8.nrows):
+            m=2
+            k=k+1
+            for j in range (0,6):
+                temp=open_text_file.sws8.cell_value(rowx=i,colx=j)
+                if (temp!=""):
+                    if m==2:
+                        reason_tree_import_sheet.write(k,1,'x')
+                reason_tree_import_sheet.write ( k, m, temp) 
+                m=m+1
+
+#Event Reason Tree 
+    if(check1Clicked.Main_Tree_Data_check==0):
+        event_reason_tree_import_sheet.write_comment('B2', '(X) to Select', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        event_reason_tree_import_sheet.write_comment('D2', 'Max Length(100)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        event_reason_tree_import_sheet.write_comment('E2', 'Max Length(100)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        event_reason_tree_import_sheet.write_comment('F2', 'Max Length (100)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        event_reason_tree_import_sheet.write_comment('G2', 'Max Length(100)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        event_reason_tree_import_sheet.write_comment('H2', 'True/False', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        event_reason_tree_import_sheet.write('A1', 'EventReasonTree',cell_format)
+        event_reason_tree_import_sheet.write('A2', 'Return Messages',cell_format)
+        event_reason_tree_import_sheet.write('B2', 'Selected',cell_format)
+        event_reason_tree_import_sheet.write('C2', 'Reason Tree Name',cell_format)
+        event_reason_tree_import_sheet.write('D2', 'Reason Level 1',cell_format)
+        event_reason_tree_import_sheet.write('E2', 'Reason Level 2',cell_format)
+        event_reason_tree_import_sheet.write('F2', 'Reason Level 3',cell_format)
+        event_reason_tree_import_sheet.write('G2', 'Reason Level 4',cell_format)
+        event_reason_tree_import_sheet.write('H2', 'Add Missing Reasons',cell_format)     
+        event_reason_tree_import_sheet.set_row(0,15.75)
+        event_reason_tree_import_sheet.set_row(1,15.75)
+        event_reason_tree_import_sheet.set_column(0,0,30.14)
+        event_reason_tree_import_sheet.set_column(1,1,15.86)
+        event_reason_tree_import_sheet.set_column(2,2,24.57)
+        event_reason_tree_import_sheet.set_column(3,3,29.29)
+        event_reason_tree_import_sheet.set_column(4,4,24.00)
+        event_reason_tree_import_sheet.set_column(5,5,26.71)
+        event_reason_tree_import_sheet.set_column(6,6,30.14)
+        event_reason_tree_import_sheet.set_column(7,7,21.14)
+        k=1
+        for i in range (9,open_text_file.sws9.nrows):
+            m=2
+            if (open_text_file.sws9.cell_value(i,0) == "Non-Productive Time"):
+                continue
+            k=k+1
+            for j in range (0,5):
+                temp=open_text_file.sws9.cell_value(rowx=i,colx=j)
+                temp1=open_text_file.sws9.cell_value(i,1)
+                temp2=open_text_file.sws9.cell_value(i,2)
+                temp3=open_text_file.sws9.cell_value(i,3)
+                temp4=open_text_file.sws9.cell_value(i,4)                
+                if (temp1 == "" and temp2 == "" and temp3 == "" and temp4 == "" ):
+                    break
+                elif (temp!=""):
+                    if m==2:
+                        event_reason_tree_import_sheet.write(k,1,'x')
+                        event_reason_tree_import_sheet.write(k,7,'TRUE')
+                event_reason_tree_import_sheet.write ( k, m, temp) 
+                m=m+1
+            
+#faults     
+    if(check1Clicked.Main_Fault_Data_check==0):  
+        faults_import_sheet.write_comment('B2', '(X) to Select', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        faults_import_sheet.write_comment('C2', 'Max Length (50)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        faults_import_sheet.write_comment('D2', 'Max Length (50)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        faults_import_sheet.write_comment('E2', 'Max Length (25)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        faults_import_sheet.write_comment('F2', 'Max Length (100)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        faults_import_sheet.write_comment('G2', 'Max Length (50)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        faults_import_sheet.write_comment('H2', 'Max Length (100)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        faults_import_sheet.write_comment('I2', 'Max Length (100)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        faults_import_sheet.write_comment('J2', 'Max Length (100)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        faults_import_sheet.write_comment('K2', 'Max Length (100)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        faults_import_sheet.write_comment('L2', 'True/False', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+        faults_import_sheet.write('A1', 'TimedEventFault',cell_format)
+        faults_import_sheet.write('A2', 'Return Messages',cell_format)
+        faults_import_sheet.write('B2', 'Selected',cell_format)
+        faults_import_sheet.write('C2', 'Downtime Production Line',cell_format)
+        faults_import_sheet.write('D2', 'Downtime Production Unit',cell_format)
+        faults_import_sheet.write('E2', 'Fault Value',cell_format)
+        faults_import_sheet.write('F2', 'Fault Name',cell_format)
+        faults_import_sheet.write('G2', 'Unit Location',cell_format)
+        faults_import_sheet.write('H2', 'Reason Level 1',cell_format)
+        faults_import_sheet.write('I2', 'Reason Level 2',cell_format)
+        faults_import_sheet.write('J2', 'Reason Level 3',cell_format)
+        faults_import_sheet.write('K2', 'Reason Level 4',cell_format)
+        faults_import_sheet.write('L2', 'Add Missing Reasons',cell_format)
+        faults_import_sheet.set_column(0,0,17.43)
+        faults_import_sheet.set_column(1,1,14.71)
+        faults_import_sheet.set_column(2,2,20.14)
+        faults_import_sheet.set_column(3,3,15.71)
+        faults_import_sheet.set_column(4,4,27.29)
+        faults_import_sheet.set_column(5,5,21.57)
+        faults_import_sheet.set_column(6,6,12.86)
+        faults_import_sheet.set_column(7,7,19.86)
+        faults_import_sheet.set_column(8,8,14.14)
+        faults_import_sheet.set_column(9,9,15.86)
+        faults_import_sheet.set_column(10,10,15.86)
+        faults_import_sheet.set_column(11,11,15.86)
+        faults_import_sheet.set_row(0,15.75)
+        faults_import_sheet.set_row(1,15.75)
+        k=1
+        for a in fault_data:
+            for i in range (5,a.nrows):
+                m=2
+                k=k+1
+                for l in range(5,open_text_file.sws1.nrows):
+                    if(a.cell_value(i,2)!=""):
+                        if m==2:
+                            faults_import_sheet.write(k,1,'x')
+                            faults_import_sheet.write(k,11,'TRUE')
+                        if(a.cell_value(i,2)==open_text_file.sws1.cell_value(l,2)):
+                            faults_import_sheet.write(k,m,open_text_file.sws1.cell_value(l,1))
+                            m=m+1
+                            if(open_text_file.sws1.cell_value(l,3)==""):
+                                faults_import_sheet.write(k,m,open_text_file.sws1.cell_value(l,2))
+                                m=m+1
+                            else:
+                                faults_import_sheet.write(k,m,open_text_file.sws1.cell_value(l,3))
+                                m=m+1
+               
+                for j in range (0,7):
+                    temp=a.cell_value(rowx=i,colx=j)
+                    faults_import_sheet.write ( k, m, temp) 
+                    m=m+1
+                    
+#Displays 
+    display_import_sheet.write_comment('B2', '(X) to Select', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+    display_import_sheet.write_comment('C2', 'Max Length(50)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+    display_import_sheet.write_comment('D2', 'Max Length(50)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+    display_import_sheet.write_comment('E2', 'Alarm View\nAutolog Downtime\nAutolog Genealogy\nAutolog Process Order\nAutolog Process Order/Time\nAutolog Product Change\nAutolog Product-Time\nAutolog Production Event\nAutoLog Time-Based\nAutolog Uptime\nAutolog User-Defined Event\nAutolog Waste\nDowntime Line View\nDowntime Unit View\nDowntime+ View\nGenealogy View\nNon-Productive Time\nProduction Overview\nProduction Run Analyst\nRelative View\nSchedule View\nSequence Of Events View\nTrend View (Normal)\nTrend View (SPC)\nWaste View\nWaste+ View\nWebUI', {'x_scale': 1.5, 'y_scale': 6.9,'font_name':'Calibri','font_size':11})
+    display_import_sheet.write_comment('F2', 'Max Length(50)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+    display_import_sheet.write_comment('G2', 'Max Length(25)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+    display_import_sheet.write_comment('H2', '(Minutes)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+    display_import_sheet.write_comment('I2', '(Minutes)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+    display_import_sheet.write_comment('J2', '(Hours)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+    display_import_sheet.write_comment('K2', '(Hours)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+    display_import_sheet.write_comment('L2', '(Hours)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+    display_import_sheet.write_comment('M2', 'True/False', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+    display_import_sheet.write_comment('N2', 'True/False', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+    display_import_sheet.write_comment('O2', 'True/False', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+    display_import_sheet.write_comment('P2', 'True/False', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+    display_import_sheet.write_comment('Q2', 'True/False', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+    display_import_sheet.write_comment('R2', 'True/False', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+    display_import_sheet.write_comment('S2', 'True/False', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+    display_import_sheet.write_comment('T2', 'True/False', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+    display_import_sheet.write_comment('U2', 'True/False', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+    display_import_sheet.write_comment('V2', 'True/False', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+    display_import_sheet.write_comment('W2', 'True/False', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+    display_import_sheet.write_comment('X2', 'True/False', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+    display_import_sheet.write_comment('Y2', 'True/False', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+    display_import_sheet.write_comment('Z2', 'True/False', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+    display_import_sheet.write_comment('AA2', 'True/False', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+    display_import_sheet.write_comment('AB2', 'True/False', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+    display_import_sheet.write_comment('AC2', 'True/False', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+    display_import_sheet.write_comment('AD2', 'Max Length(50)', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+    display_import_sheet.write_comment('AE2', 'True/False', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+    display_import_sheet.write_comment('AF2', 'True/False', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+    display_import_sheet.write_comment('AG2', 'True/False', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+    display_import_sheet.write_comment('AH2', 'True/False', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+    display_import_sheet.write_comment('AI2', 'Valid Production Status', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+    display_import_sheet.write_comment('AK2', 'Production Line Description', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+    display_import_sheet.write_comment('AM2', 'For UDE displays', {'x_scale': 1.2, 'y_scale': 0.8,'font_name':'Calibri','font_size':11})
+    display_import_sheet.write('A1', 'Displays',cell_format)
+    display_import_sheet.write('A2', 'Return Messages',cell_format)
+    display_import_sheet.write('B2', 'Selected',cell_format)
+    display_import_sheet.write('C2', 'Display Group',cell_format)
+    display_import_sheet.write('D2', 'Display Name',cell_format)
+    display_import_sheet.write('E2', 'Display Type',cell_format)
+    display_import_sheet.write('F2', 'Master Unit',cell_format)
+    display_import_sheet.write('G2', 'Event Prompt',cell_format)
+    display_import_sheet.write('H2', 'Display Interval',cell_format)
+    display_import_sheet.write('I2', 'Display Offset',cell_format)
+    display_import_sheet.write('J2', 'Initial Count',cell_format)
+    display_import_sheet.write('K2', 'Max Count',cell_format)
+    display_import_sheet.write('L2', 'Max Edit',cell_format)
+    display_import_sheet.write('M2', 'Row Headers',cell_format)
+    display_import_sheet.write('N2', 'Column Headers',cell_format)
+    display_import_sheet.write('O2', 'Row Numbering',cell_format)
+    display_import_sheet.write('P2', 'Column Numbering',cell_format)
+    display_import_sheet.write('Q2', 'Spec Window',cell_format)
+    display_import_sheet.write('R2', 'Spec Column',cell_format)
+    display_import_sheet.write('S2', 'Comment Window',cell_format)
+    display_import_sheet.write('T2', 'Display Event',cell_format)
+    display_import_sheet.write('U2', 'Display Date',cell_format)
+    display_import_sheet.write('V2', 'Display Time',cell_format)
+    display_import_sheet.write('W2', 'Display Product',cell_format)
+    display_import_sheet.write('X2', 'Display Var Order',cell_format)
+    display_import_sheet.write('Y2', 'Display Data Type',cell_format)
+    display_import_sheet.write('Z2', 'Display Data Source',cell_format)
+    display_import_sheet.write('AA2', 'Display Specifications',cell_format)
+    display_import_sheet.write('AB2', 'Display Prod Line',cell_format)
+    display_import_sheet.write('AC2', 'Display Prod Unit',cell_format)
+    display_import_sheet.write('AD2', 'Security Group',cell_format)
+    display_import_sheet.write('AE2', 'Display Description',cell_format)
+    display_import_sheet.write('AF2', 'Display Eng Units',cell_format)
+    display_import_sheet.write('AG2', 'Dynamic Rows',cell_format)
+    display_import_sheet.write('AH2', 'Wrap Product',cell_format)
+    display_import_sheet.write('AI2', 'Label Print Status',cell_format)
+    display_import_sheet.write('AJ2', 'Maximum Inventory days',cell_format)
+    display_import_sheet.write('AK2', 'Production Line',cell_format)
+    display_import_sheet.write('AL2', 'Event Component Input',cell_format)
+    display_import_sheet.write('AM2', 'Event SubType',cell_format)
+    display_import_sheet.set_column(0,0,26.14)
+    display_import_sheet.set_column(1,1,8.43)
+    display_import_sheet.set_column(2,2,28.57)
+    display_import_sheet.set_column(3,3,36)
+    display_import_sheet.set_column(4,4,35.86)
+    display_import_sheet.set_column(5,5,42.57)
+    display_import_sheet.set_column(6,6,12.43)#g
+    display_import_sheet.set_column(7,7,16.29)
+    display_import_sheet.set_column(8,8,18)
+    display_import_sheet.set_column(9,9,11.14)
+    display_import_sheet.set_column(10,10,9.71)
+    display_import_sheet.set_column(11,11,8.43)
+    display_import_sheet.set_column(12,12,11.86)
+    display_import_sheet.set_column(13,13,15)
+    display_import_sheet.set_column(14,14,14.71)
+    display_import_sheet.set_column(15,15,17.86)
+    display_import_sheet.set_column(16,16,12.43)#q
+    display_import_sheet.set_column(17,17,11.71)
+    display_import_sheet.set_column(18,18,17.14)
+    display_import_sheet.set_column(19,19,12.14)
+    display_import_sheet.set_column(20,20,11.57)
+    display_import_sheet.set_column(21,21,11.57)
+    display_import_sheet.set_column(22,22,14.14)
+    display_import_sheet.set_column(23,23,15.86)#x
+    display_import_sheet.set_column(24,24,16)
+    display_import_sheet.set_column(24,24,17.86)
+    display_import_sheet.set_column(24,24,19.71)#aa
+    display_import_sheet.set_column(24,24,15.57)
+    display_import_sheet.set_column(24,24,15.57)
+    display_import_sheet.set_column(24,24,17.43)
+    display_import_sheet.set_column(24,24,17.57)
+    display_import_sheet.set_column(24,24,15.43)
+    display_import_sheet.set_column(24,24,13.14)
+    display_import_sheet.set_column(24,24,12.43)
+    display_import_sheet.set_column(24,24,15.71)
+    display_import_sheet.set_column(24,24,23)
+    display_import_sheet.set_column(24,24,25.57)
+    display_import_sheet.set_column(24,24,39)
+    display_import_sheet.set_column(24,24,22.57)
+    display_import_sheet.set_row(0,21.71)
+    display_import_sheet.set_row(1,13.43)
+    k=1
+    for i in range (4,open_text_file.sws10.nrows):
+        if(open_text_file.sws10.cell_value(i,3) == "Autolog Production Event" or open_text_file.sws10.cell_value(i,3) == "Non-Productive Time" ):
+            continue        
+        m=2
+        k=k+1
+        for j in range (0,39):
+             if j==2 or j==6:
+                 continue
+             temp= open_text_file.sws10.cell_value(i,j)
+             if (open_text_file.sws10.cell_value(i,0)!=""):
+                 if m==2:
+                     display_import_sheet.write(k,1,'x')
+                 if m==37 :     
+                     display_import_sheet.write(k,36,open_text_file.sws1.cell_value(5,1))
+                 display_import_sheet.write ( k, m, temp) 
+                 m=m+1                   
+    workbook1.close()
+    os.system('importsheet.xlsx')
+def button_hover(e):
+    btn4['bg']="#8ED6FF"
+
+def button_hover_leave(e):
+    btn4['bg']="SystemButtonFace"
+    
+btn4 = Button(root, text="Click to Create Import Sheet", fg='black',state = DISABLED,command=start_app)
+btn4.place(x=1000, y=650)
+    
+btn4.bind("<Enter>",button_hover)
+btn4.bind("<Leave>",button_hover_leave)
+
+root.mainloop()
